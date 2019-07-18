@@ -1,22 +1,13 @@
 <section class="sct-color-1 slice">
   <div class="container">
-    <%= form_for [@post_image, @post_comment] do |f| %>
-    <div class="row">
-        <div class="col-sm-12">
-            <%= f.text_area :comment, rows:'5', class: "form-control",placeholder: "コメントをここに" %>
-        </div>
-    </div>
-    <%= f.submit "送信する", class: "btn btn-lg btn-base-1 mt-20 pull-right" %>
-<% end %>
-        <div class="post-item"></div>
-
-          
+    <div class="col-md-12 post_images_container">
+     <div class="post-item">  
       <div class="post-meta-top">
         <div class="post-image">
           <%= attachment_image_tag @post_image, :image %>
         </div>
       </div>
-    <div class="post-content">
+      <div class="post-content">
         <h2 class="post-title"><%= @post_image.shop_name %></h2>
         <ul class="meta-info-cells v4 float-wrapper">
         <li>
@@ -47,6 +38,11 @@
           <i class="fa fa-comment"></i>
           <a href="#comments"><%= @post_image.post_comments.count %></a>
         </li>
+        <li>
+          <% if @post_image.user == current_user %>
+          <%= link_to "削除", post_image_path(@post_image), method: :delete %>
+          <% end %>
+        </li>
         </ul>
         <div class="post-content-inner mt-20">
             <p><%= @post_image.caption %></p>
@@ -63,14 +59,14 @@
                   <div class="comment-avatar">
                     <div class="avatar">
                       <!-- <img src="images/sample-author1.jpg"> -->
-                      <%= image_tag('sample-author1.jpg', style: "width: 60px; height: 60px") %>
+                      <%= attachment_image_tag post_comment.user, :profile_image, :fill, 60, 60, fallback: "no_image.jpg" %>
                     </div>
                   </div>
                   <div class="comment-text">
                     <div class="comment-author clearfix">
                       <a href="#" class="link-author"><%= post_comment.user.name %></a>
                       <span class="comment-meta">
-                        <span class="comment-date"><%= post_comments.createde_at.strftime('%Y/%m/%d') %></span>
+                        <span class="comment-date"><%= post_comment.created_at.strftime('%Y/%m/%d') %></span>
                       </span>
                     </div>
                     <div class="comment-entry"><% post_comment.comment %></div>
@@ -88,7 +84,7 @@
               <span>コメント</span>
             </h3>
           </div>
-          <form class="mt-20">
+
             <%= form_for [@post_image, @post_comment] do |f| %>
             <div class="row">
               <div class="col-sm-12">
@@ -97,7 +93,6 @@
             </div>
             <%= f.submit "送信する", class:"btn btn-lg btn-base-1 mt-20 pull-right" %>
             <% end %>
-          </form>
 
         </div>
       </div>
